@@ -16,11 +16,18 @@ impl Commands {
     }
 
     fn spawn(self) -> std::io::Result<()> {
+        // ! spawn new proccess
 
-        match self.name.as_ref() {
+        // ! split args
+        let args: Vec<&str> = self.name
+            .split_whitespace()
+            .collect();
+
+        match args[0].as_ref() {
             "hello" => stdout().write_all(self.output.as_bytes())?,
             _ => stdout().write_all(b"Invalid command\r\n")?,
         }
+
 
         // ! explicit return <3
         return Ok(());
@@ -30,6 +37,7 @@ impl Commands {
 fn main() -> std::io::Result<()>{
     loop {
         print!("proompt: ");
+        // ! explicitly flush to ensure prints before read_line
         stdout().flush()?;
 
         let mut i = String::new();
